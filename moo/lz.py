@@ -2,7 +2,10 @@ import numpy as np
 from pymoo.core.problem import Problem
 
 """
-My implementation of the LZ09 problem family.
+Implementation of the LZ problem family as defined in:
+
+H. Li and Q. Zhang. Multiobjective optimization problems with complicated pareto sets, MOEA/D and NSGA-II.
+IEEE Transactions on Evolutionary Computation, 12(2):284-302, April 2009.
 """
 
 class LZ(Problem):
@@ -14,8 +17,8 @@ class LZ(Problem):
         n_var: int,
         n_obj: int,
     ):
-        """LZ09 benchmark family as defined in:
-        * H. Li and Q. Zhang. Multiobjective optimization problems with complicated pareto sets, MOEA/D and NSGA-II.
+        """LZ benchmark family as defined in:
+        H. Li and Q. Zhang. Multiobjective optimization problems with complicated pareto sets, MOEA/D and NSGA-II.
         IEEE Transactions on Evolutionary Computation, 12(2):284-302, April 2009.
         """
         super().__init__(n_var=n_var,
@@ -224,13 +227,13 @@ class LZ6(LZ):
         )
     
     def _evaluate(self, x, out, *args, **kwargs):
-        j_1 = np.arange(1, self.n_var, 3)
-        j_2 = np.arange(2, self.n_var, 3)
-        j_3 = np.arange(3, self.n_var, 3)
+        j_1 = np.arange(3, self.n_var, 3)
+        j_2 = np.arange(4, self.n_var, 3)
+        j_3 = np.arange(2, self.n_var, 3)
 
-        f_1_sum = np.sum( [np.power( x[i] - 1*x[1]*np.sin(2*np.pi*x[0] + ( (i+1)*np.pi/self.n_var ) ), 2 ) for i in j_1] )
-        f_2_sum = np.sum( [np.power( x[i] - 1*x[1]*np.sin(2*np.pi*x[0] + ( (i+1)*np.pi/self.n_var ) ), 2 ) for i in j_2] )
-        f_3_sum = np.sum( [np.power( x[i] - 1*x[1]*np.sin(2*np.pi*x[0] + ( (i+1)*np.pi/self.n_var ) ), 2 ) for i in j_3] )
+        f_1_sum = np.sum( [np.power( x[i] - 2*x[1]*np.sin(2*np.pi*x[0] + ( (i+1)*np.pi/self.n_var ) ), 2 ) for i in j_1] )
+        f_2_sum = np.sum( [np.power( x[i] - 2*x[1]*np.sin(2*np.pi*x[0] + ( (i+1)*np.pi/self.n_var ) ), 2 ) for i in j_2] )
+        f_3_sum = np.sum( [np.power( x[i] - 2*x[1]*np.sin(2*np.pi*x[0] + ( (i+1)*np.pi/self.n_var ) ), 2 ) for i in j_3] )
 
         f_1 = np.cos(0.5*np.pi*x[0]) * np.cos(0.5*np.pi*x[1]) + (2/len(j_1)) * f_1_sum
         f_2 = np.cos(0.5*np.pi*x[0]) * np.sin(0.5*np.pi*x[1]) + (2/len(j_2)) * f_2_sum
@@ -238,12 +241,26 @@ class LZ6(LZ):
 
         out["F"] = [f_1, f_2, f_3]
 
-    def _calc_pareto_front(self, n_pareto_points=100):
-        '''TODO: make this not read the PS from jmetalpy'''
-        pareto_front = np.genfromtxt("./moo/pareto_fronts/LZ09_F6.csv", delimiter=",")
-        return pareto_front
-    def _calc_pareto_set(self, n_pareto_points=100):
-        return None
+    def _calc_pareto_set(self, n_pareto_points=625):
+        #calculate the optimal values for x_1 and x_2. Try to get as many equidistant points as possible and calculate the rest randonly
+        n_equidistant_samples = np.floor( np.sqrt(n_pareto_points) ).astype(int)
+        n_random_samples = n_pareto_points - (n_equidistant_samples * n_equidistant_samples)
+        print(n_equidistant_samples, n_random_samples)
+        
+        equidistant_samples = np.array( [[x, y] for x in np.linspace(0.0, 1.0, n_equidistant_samples) for y in np.linspace(0.0, 1.0, n_equidistant_samples)] )
+        random_samples = np.random.rand(n_random_samples, 2)
+        x_1_2 = np.vstack((equidistant_samples, random_samples)) #the optimal values for x[:,0] and x[:,1]
+
+        #set x_1 and x_2
+        pareto_set = np.zeros((n_pareto_points, self.n_var))
+        pareto_set[:, 0] = x_1_2[:,0]
+        pareto_set[:, 1] = x_1_2[:,1]
+
+        #calculate the remaining values
+        for j in range(2, self.n_var):
+            pareto_set[:, j] = 2*pareto_set[:,1] * np.sin(2*np.pi*pareto_set[:,0] + ( (j+1)*np.pi/self.n_var ) )
+
+        return pareto_set
 
 class LZ7(LZ1): #PS and bounds are the same as LZ1
     def get_y(self, x, i):
@@ -272,6 +289,7 @@ class LZ8(LZ7): #PS and bounds are the same as LZ7 (and LZ1)
         out["F"] = [f_1, f_2]
 
 class LZ9(LZ2): #PS and bounds are the same as LZ2
+
     def _evaluate(self, x, out, *args, **kwargs):
         odd = np.arange(1, self.n_var, 2)
         even = np.arange(2, self.n_var, 2) #zero is not included
