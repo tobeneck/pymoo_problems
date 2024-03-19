@@ -34,7 +34,7 @@ def run_test(problem:Problem,
                 verbose=False)
 
 
-def plot_front(problem:Problem, res=None, title:str="") -> go.Figure:
+def plot_front(problem:Problem, nds=None, title:str="") -> go.Figure:
     '''
     Plots the pareto front of a problem.
 
@@ -42,17 +42,17 @@ def plot_front(problem:Problem, res=None, title:str="") -> go.Figure:
     -----------
     problem: pymoo.Problem
         The problem the data was generated with.
-    res: pymoo.Result | None
-        The result of a test. If None, only the pareto front is plotted.S
+    nds: np.array | None
+        The reulting non-dominated solutions from a test. If None, only the pareto front is plotted.
     '''
     if problem.n_obj == 2:
-        return plot_2d_front(problem, res, title)
+        return plot_2d_front(problem, nds, title)
     elif problem.n_obj == 3:
-        return plot_3d_front(problem, res, title)
+        return plot_3d_front(problem, nds, title)
     else:
         print("Can't plot front for problems with more than 3 objectives.")
 
-def plot_2d_front(problem:Problem, res=None, title:str="") -> go.Figure:
+def plot_2d_front(problem:Problem, nds=None, title:str="") -> go.Figure:
     '''
     Plots the pareto front of a 2D problem.
 
@@ -60,8 +60,8 @@ def plot_2d_front(problem:Problem, res=None, title:str="") -> go.Figure:
     -----------
     problem: pymoo.Problem
         The problem the data was generated with.
-    res: pymoo.Result | None
-        The result of a test. If None, only the pareto front is plotted.
+    nds: np.array | None
+        The reulting non-dominated solutions from a test. If None, only the pareto front is plotted.
     '''
     fig = go.Figure()
 
@@ -71,9 +71,8 @@ def plot_2d_front(problem:Problem, res=None, title:str="") -> go.Figure:
     fig.add_trace(go.Scatter(x=pareto_front[:,0], y=pareto_front[:,1],
                         mode='lines',
                         name='PF'))
-    if res is not None:
-        print("res", res)
-        fig.add_trace(go.Scatter(x=res.F[:,0], y=res.F[:,1],
+    if nds is not None:
+        fig.add_trace(go.Scatter(x=nds[:,0], y=nds[:,1],
                             mode='markers',
                             name='NDS'))
     
@@ -94,7 +93,7 @@ def plot_2d_front(problem:Problem, res=None, title:str="") -> go.Figure:
 
     return fig
 
-def plot_3d_front(problem:Problem, res=None, title:str="") -> go.Figure:
+def plot_3d_front(problem:Problem, nds=None, title:str="") -> go.Figure:
     '''
     Plots the pareto front of a 3D problem.
 
@@ -102,8 +101,8 @@ def plot_3d_front(problem:Problem, res=None, title:str="") -> go.Figure:
     -----------
     problem: pymoo.Problem
         The problem the data was generated with.
-    res: pymoo.Result | None
-        The result of a test. If None, only the pareto front is plotted.
+    nds: np.array | None
+        The reulting non-dominated solutions from a test. If None, only the pareto front is plotted.
     '''
     fig = go.Figure()
 
@@ -117,8 +116,8 @@ def plot_3d_front(problem:Problem, res=None, title:str="") -> go.Figure:
                    opacity=0.5,
                    color='rgba(244,22,100,0.6)'
                   )])
-    if res is not None:
-        fig.add_trace(go.Scatter3d(x=res.F[:,0], y=res.F[:,1],z=res.F[:,2],
+    if nds is not None:
+        fig.add_trace(go.Scatter3d(x=nds[:,0], y=nds[:,1],z=nds[:,2],
                         mode='markers',
                         marker=dict(
                             size=5,
