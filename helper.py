@@ -2,7 +2,7 @@ from pymoo.optimize import minimize
 from pymoo.algorithms.moo.nsga2 import NSGA2
 from pymoo.core.problem import Problem
 from pymoo.core.algorithm import Algorithm
-from pymoo.visualization.scatter import Scatter #TODO: delete!
+from pymoo.core.result import Result
 
 import plotly.graph_objects as go
 
@@ -33,52 +33,35 @@ def run_test(problem:Problem,
                 seed=1,
                 verbose=False)
 
-def plot_result(res, problem:Problem) -> Scatter:
-    '''
-    Plots the result of a test.
 
-    Parameters:
-    -----------
-    res: minimize
-        The result of a test.
-    problem: Problem
-        The problem the data was generated with.
-    '''
-
-    plot = Scatter()
-    plot.add(problem.pareto_front(), plot_type="line", color="black", alpha=0.7)
-    plot.add(res.F, facecolor="none", edgecolor="red")
-    return plot
-
-
-def plot_front(res, problem:Problem, title:str=""):
+def plot_front(problem:Problem, res=None, title:str="") -> go.Figure:
     '''
     Plots the pareto front of a problem.
 
     Parameters:
     -----------
-    res: minimize
-        The result of a test.
-    problem: Problem
+    problem: pymoo.Problem
         The problem the data was generated with.
+    res: pymoo.Result | None
+        The result of a test. If None, only the pareto front is plotted.S
     '''
     if problem.n_obj == 2:
-        plot_2d_front(res, problem, title)
+        return plot_2d_front(problem, res, title)
     elif problem.n_obj == 3:
-        plot_3d_front(res, problem, title)
+        return plot_3d_front(problem, res, title)
     else:
         print("Can't plot front for problems with more than 3 objectives.")
 
-def plot_2d_front(res, problem:Problem, title:str=""):
+def plot_2d_front(problem:Problem, res=None, title:str="") -> go.Figure:
     '''
     Plots the pareto front of a 2D problem.
 
     Parameters:
     -----------
-    res: minimize
-        The result of a test.
-    problem: Problem
+    problem: pymoo.Problem
         The problem the data was generated with.
+    res: pymoo.Result | None
+        The result of a test. If None, only the pareto front is plotted.
     '''
     fig = go.Figure()
 
@@ -88,9 +71,11 @@ def plot_2d_front(res, problem:Problem, title:str=""):
     fig.add_trace(go.Scatter(x=pareto_front[:,0], y=pareto_front[:,1],
                         mode='lines',
                         name='PF'))
-    fig.add_trace(go.Scatter(x=res.F[:,0], y=res.F[:,1],
-                        mode='markers',
-                        name='NDS'))
+    if res is not None:
+        print("res", res)
+        fig.add_trace(go.Scatter(x=res.F[:,0], y=res.F[:,1],
+                            mode='markers',
+                            name='NDS'))
     
     fig.update_layout(
         autosize=False,
@@ -107,18 +92,18 @@ def plot_2d_front(res, problem:Problem, title:str=""):
         font_size=12,
     )
 
-    fig.show()
+    return fig
 
-def plot_3d_front(res, problem:Problem, title:str=""):
+def plot_3d_front(problem:Problem, res=None, title:str="") -> go.Figure:
     '''
     Plots the pareto front of a 3D problem.
 
     Parameters:
     -----------
-    res: minimize
-        The result of a test.
-    problem: Problem
+    problem: pymoo.Problem
         The problem the data was generated with.
+    res: pymoo.Result | None
+        The result of a test. If None, only the pareto front is plotted.
     '''
     fig = go.Figure()
 
@@ -132,13 +117,14 @@ def plot_3d_front(res, problem:Problem, title:str=""):
                    opacity=0.5,
                    color='rgba(244,22,100,0.6)'
                   )])
-    fig.add_trace(go.Scatter3d(x=res.F[:,0], y=res.F[:,1],z=res.F[:,2],
-                    mode='markers',
-                    marker=dict(
-                        size=5,
-                        opacity=0.9,
-                    ),
-                    name='NDS'))
+    if res is not None:
+        fig.add_trace(go.Scatter3d(x=res.F[:,0], y=res.F[:,1],z=res.F[:,2],
+                        mode='markers',
+                        marker=dict(
+                            size=5,
+                            opacity=0.9,
+                        ),
+                        name='NDS'))
     
     fig.update_layout(
         autosize=True,
@@ -154,4 +140,4 @@ def plot_3d_front(res, problem:Problem, title:str=""):
         title=title,
         font_size=12,
     )
-    fig.show()
+    return fig
