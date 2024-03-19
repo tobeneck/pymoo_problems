@@ -31,9 +31,15 @@ from pymoo_problems.moo.lz_jmetalpy import LZ09_F1, LZ09_F2, LZ09_F3, LZ09_F4, L
 This class is currently just a wrapper for the UF [5] problems which are a direct copy of a LZ problem.
 
 ```python
-from pymoo_problems.moo.of import UF1, UF2, UF3, UF8
+from pymoo_problems.moo.uf import UF1, UF2, UF3, UF8
 ```
 
+## ZDT Problems
+Added a pareto set calculation for ZDT [6] functions ZDT1, ZDT2, ZDT3, ZDT4, and ZDT6 (not ZDT5) to the pymoo [1] implementation.
+
+```python
+from pymoo_problems.moo.ZDT import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
+```
 
 
 # References
@@ -47,3 +53,6 @@ from pymoo_problems.moo.of import UF1, UF2, UF3, UF8
 [4] A. Benítez-Hidalgo, A. J. Nebro, J. García-Nieto, I. Oregi, und J. Del Ser, „jMetalPy: A Python framework for multi-objective optimization with metaheuristics“, Swarm and Evolutionary Computation, Bd. 51, S. 100598, Dez. 2019, doi: 10.1016/j.swevo.2019.100598.
 
 [5] Q. Zhang, A. Zhou, S. Zhao, P. Suganthan, W. Liu, und S. Tiwari, „Multiobjective optimization Test Instances for the CEC 2009 Special Session and Competition“, Mechanical Engineering, Jan. 2008.
+
+[6] E. Zitzler, K. Deb, und L. Thiele, „Comparison of Multiobjective Evolutionary Algorithms: Empirical Results“, Evol. Comput., Bd. 8, Nr. 2, S. 173–195, Juni 2000, doi: 10.1162/106365600568202.
+
