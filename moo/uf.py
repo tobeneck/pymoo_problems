@@ -1,7 +1,7 @@
 import numpy as np
 from pymoo.core.problem import Problem
 
-from lz import LZ2, LZ5, LZ6, LZ8
+from pymoo_problems.moo.lz import LZ2, LZ5, LZ6, LZ8
 
 """
 Implementation of the LZ problem family as defined in:
