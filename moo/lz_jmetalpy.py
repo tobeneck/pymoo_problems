@@ -52,23 +52,23 @@ class LZ09(Problem):
         dim += 1
 
         if type == 21:
-            xy = x#2 * (x - 0.5) #TODO: change back!
+            xy = 2 * (x - 0.5) 
             beta = xy - math.pow(t1, 0.5 * (self.n_var + 3 * dim - 8) / (self.n_var - 2))
         if type == 22:
             theta = 6 * math.pi * t1 + dim * math.pi / self.n_var
-            xy = x#2 * (x - 0.5)#TODO: change back!
+            xy = 2 * (x - 0.5)
             beta = xy - math.sin(theta)
         if type == 23:
             theta = 6 * math.pi * t1 + dim * math.pi / self.n_var
             ra = 0.8 * t1
-            xy = x#2 * (x - 0.5)#TODO: change back!
+            xy = 2 * (x - 0.5)
             if css == 1:
                 beta = xy - ra * math.cos(theta)
             else:
                 beta = xy - ra * math.sin(theta)
         if type == 24:
             theta = 6 * math.pi * t1 + dim * math.pi / self.n_var
-            xy = x#2 * (x - 0.5)#TODO: change back!
+            xy = 2 * (x - 0.5)
             ra = 0.8 * t1
             if css == 1:
                 beta = xy - ra * math.cos(theta / 3)
@@ -78,7 +78,7 @@ class LZ09(Problem):
             rho = 0.8
             phi = math.pi * t1
             theta = 6 * math.pi * t1 + dim * math.pi / self.n_var
-            xy = x#2 * (x - 0.5)#TODO: change back!
+            xy = 2 * (x - 0.5)
             if css == 1:
                 beta = xy - rho * math.sin(phi) * math.sin(theta)
             elif css == 2:
@@ -88,7 +88,7 @@ class LZ09(Problem):
         if type == 26:
             theta = 6 * math.pi * t1 + dim * math.pi / self.n_var
             ra = 0.3 * t1 * (t1 * math.cos(4 * theta) + 2)
-            xy = x#2 * (x - 0.5)#TODO: change back!
+            xy = 2 * (x - 0.5)
             if css == 1:
                 beta = xy - ra * math.cos(theta)
             else:
@@ -104,12 +104,12 @@ class LZ09(Problem):
         dim += 1
 
         if type == 31:
-            xy = x#4 * (x - 0.5)
+            xy = 4 * (x - 0.5)
             rate = 1.0 * dim / self.n_var
             beta = xy - 4 * (t1 * t1 * rate + t2 * (1.0 - rate)) + 2
         if type == 32:
             theta = 2 * math.pi * t1 + dim * math.pi / self.n_var
-            xy = x#4 * (x - 0.5)
+            xy = 4 * (x - 0.5)
             beta = xy - 2 * t2 * math.sin(theta)
 
         return beta
@@ -274,7 +274,6 @@ class LZ09(Problem):
         return pareto_front
 
 
-import math
 class LZ09_F1(LZ09):
     def __init__(self, n_var=10):
         xl=0.0
@@ -289,43 +288,6 @@ class LZ09_F1(LZ09):
             ptype=21
         )
         self.pf_path = "./moo/pareto_fronts/LZ09_F1.csv"
-
-    def _calc_pareto_set(self, n_pareto_points=100):
-        n = self.n_var
-        pareto_set = np.zeros((n_pareto_points, n))
-        pareto_set[:, 0] = np.linspace(0.0, 1.0, n_pareto_points)
-
-        for j in range(2, n+1): #TODO: can I write this better?
-            frac = (3 * (j-2)) / (n-2)
-            pareto_set[:, j-1] = np.power( pareto_set[:, 0], 0.5 * ( 1.0 + frac ) )
-
-        return pareto_set
-
-class my_LZ09_F1(LZ09_F1):
-    def test_eval_ind(self, x):
-        '''test evaluate one individual.'''
-        f_1_sum = 0.0
-        f_2_sum = 0.0
-
-        n_even = 0
-        n_odd = 0
-
-        for i in range(2, self.n_var+1):
-            x_1 = math.pow( x[0], 0.5 * ( 1.0 + ( (3*(i-2) / (self.n_var - 2) ) ) ) )
-            if i % 2 == 0:
-                n_even+=1
-                f_2_sum += math.pow( (x[i-1] - x_1), 2)
-            else:
-                n_odd+=1
-                f_1_sum += math.pow( (x[i-1] - x_1), 2)
-                
-
-        f_1 = x[0] + (1 / n_odd) * f_1_sum
-        f_2 = 1 - math.sqrt(x[0]) + (1 / n_odd) * f_2_sum
-        return [f_1, f_2]
-       
-    def _evaluate(self, x, out, *args, **kwargs):
-        out["F"] = self.test_eval_ind(x)
 
 class LZ09_F2(LZ09):
     def __init__(self, n_var=30):
@@ -342,31 +304,8 @@ class LZ09_F2(LZ09):
             ptype=21
         )
         self.pf_path = "./moo/pareto_fronts/LZ09_F2.csv"
-    
-    def _calc_pareto_set(self, n_pareto_points=100):
-        n = self.n_var
-        pareto_set = np.zeros((n_pareto_points, n))
-        pareto_set[:, 0] = np.linspace(self.xl[0], self.xu[0], n_pareto_points)
 
-        # for j in range(2, n+1): #TODO: can I write this better?
-        #     pareto_set[:, j-1] = np.sin( 6 * np.pi * pareto_set[:, 0] + ( n * np.pi / self.n_var ) )
-        for i in range(n_pareto_points):
-            for j in range(1, n):
-                pareto_set[i, j] = math.sin( 6 * math.pi * pareto_set[i, 0] + ( j+1 * math.pi / self.n_var ) )
-        return pareto_set
 
-class my_LZ09_F2(LZ09_F2):
-    def _evaluate(self, x, out, *args, **kwargs):
-        odd = np.arange(1, self.n_var, 2)
-        even = np.arange(2, self.n_var, 2) #zero is not included
-
-        f_1_sum = sum( [math.pow( x[i] - math.sin( 6 * math.pi * x[0] + ( i+1 * math.pi / self.n_var ) ), 2 ) for i in odd] )
-        f_2_sum = sum( [math.pow( x[i] - math.sin( 6 * math.pi * x[0] + ( i+1 * math.pi / self.n_var ) ), 2 ) for i in even] )
-
-        f_1 = x[0] + (2 / len(odd)) * f_1_sum
-        f_2 = 1 - math.sqrt(x[0]) + (2 / len(even)) * f_2_sum
-
-        out["F"] = [f_1, f_2]
         
 class LZ09_F3(LZ09):
     def __init__(self, n_var=30):
@@ -436,28 +375,6 @@ class LZ09_F6(LZ09):
             ptype=31
         )
         self.pf_path = "./moo/pareto_fronts/LZ09_F6.csv"
-    
-    # def _calc_pareto_set(self, n_pareto_points=100):
-    #     n = self.n_var
-
-    #     x1s = np.linspace(self.xl[0], self.xu[0], 10) #TODO: 10 * 10 = 100 points. Can I make this scalable?
-    #     x2s = np.linspace(self.xl[1], self.xu[1], 10)
-
-    #     pareto_set = np.zeros((n_pareto_points, n))
-
-    #     for x1 in x1s:
-    #         for x2 in x2s:
-                
-
-    #     pareto_set = np.zeros((n_pareto_points, n))
-    #     pareto_set[:, 0] = np.linspace(self.xl[0], self.xu[0], n_pareto_points)
-
-    #     # for j in range(2, n+1): #TODO: can I write this better?
-    #     #     pareto_set[:, j-1] = np.sin( 6 * np.pi * pareto_set[:, 0] + ( n * np.pi / self.n_var ) )
-    #     for i in range(n_pareto_points):
-    #         for j in range(1, n):
-    #             pareto_set[i, j] = math.sin( 6 * math.pi * pareto_set[i, 0] + ( j * math.pi / self.n_var ) )
-    #     return pareto_set
 
 
 class LZ09_F7(LZ09):
@@ -474,10 +391,6 @@ class LZ09_F7(LZ09):
             ptype=21
         )
         self.pf_path = "./moo/pareto_fronts/LZ09_F7.csv"
-    
-    def _calc_pareto_set(self, n_pareto_points=100):
-        LZ01 = LZ09_F1(n_var=self.n_var) #has the same PS as F1
-        return LZ01._calc_pareto_set(n_pareto_points=n_pareto_points)
 
 
 class LZ09_F8(LZ09):
@@ -494,10 +407,6 @@ class LZ09_F8(LZ09):
             ptype=21
         )
         self.pf_path = "./moo/pareto_fronts/LZ09_F8.csv"
-    
-    def _calc_pareto_set(self, n_pareto_points=100):
-        LZ01 = LZ09_F1(n_var=self.n_var) #has the same PS as F1
-        return LZ01._calc_pareto_set(n_pareto_points=n_pareto_points)
 
 
 class LZ09_F9(LZ09):
@@ -515,8 +424,4 @@ class LZ09_F9(LZ09):
             ptype=22
         )
         self.pf_path = "./moo/pareto_fronts/LZ09_F9.csv"
-    
-    def _calc_pareto_set(self, n_pareto_points=100):
-        LZ02 = LZ09_F2(n_var=self.n_var) #has the same PS as F2
-        return LZ02._calc_pareto_set(n_pareto_points=n_pareto_points)
     
