@@ -38,9 +38,14 @@ from pymoo_problems.moo.uf import UF1, UF2, UF3, UF8
 Added a pareto set calculation for ZDT [6] functions ZDT1, ZDT2, ZDT3, ZDT4, and ZDT6 (not ZDT5) to the pymoo [1] implementation.
 
 ```python
-from pymoo_problems.moo.ZDT import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
+from pymoo_problems.moo.zdt import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
 ```
+## DTLZ Problems
+Added a pareto set calculation for DTLZ [7] functions DTLZ1, DTLZ2, DTLZ3, DTLZ5, and DTLZ6 (not DTLZ4 or DTLZ7) to the pymoo [1] implementation.
 
+```python
+from pymoo_problems.moo.dtlz import DTLZ1, DTLZ2, DTLZ3, DTLZ5, DTLZ6
+```
 
 # References
 
@@ -55,4 +60,7 @@ from pymoo_problems.moo.ZDT import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
 [5] Q. Zhang, A. Zhou, S. Zhao, P. Suganthan, W. Liu, und S. Tiwari, „Multiobjective optimization Test Instances for the CEC 2009 Special Session and Competition“, Mechanical Engineering, Jan. 2008.
 
 [6] E. Zitzler, K. Deb, und L. Thiele, „Comparison of Multiobjective Evolutionary Algorithms: Empirical Results“, Evol. Comput., Bd. 8, Nr. 2, S. 173–195, Juni 2000, doi: 10.1162/106365600568202.
+
+[7] K. Deb, L. Thiele, M. Laumanns, und E. Zitzler, „Scalable multi-objective optimization test problems“, in Proceedings of the 2002 Congress on Evolutionary Computation. CEC’02 (Cat. No.02TH8600), Mai 2002, S. 825–830 Bd.1. doi: 10.1109/CEC.2002.1007032.
+
 
