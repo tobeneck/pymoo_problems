@@ -28,10 +28,16 @@ from pymoo_problems.moo.lz_jmetalpy import LZ09_F1, LZ09_F2, LZ09_F3, LZ09_F4, L
 ```
 
 ## CEC 2009 Benchmark Problems
-This class is currently just a wrapper for the UF [5] problems which are a direct copy of a LZ problem.
+Currently six functions of the UF [5] Benchmarking set are implemented: UF1, UF2, UF3, UF8, UF9, and UF10.
+Four of these functions are a direct copy of the LZ [3] test suite described above:
+- UF1 = LZ2
+- UF2 = LZ5
+- UF3 = LZ8
+- UF8 = LZ6
+
 
 ```python
-from pymoo_problems.moo.uf import UF1, UF2, UF3, UF8
+from pymoo_problems.moo.uf import UF1, UF2, UF3, UF8, UF9, UF10
 ```
 
 ## ZDT Problems
