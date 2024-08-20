@@ -33,7 +33,7 @@ class LZ(Problem):
 
 
 class LZ1(LZ):
-    def __init__(self, n_var=10):
+    def __init__(self, n_var=30):
         xl=0.0
         xu=1.0
         super().__init__(
@@ -263,6 +263,9 @@ class LZ6(LZ):
         return pareto_set
 
 class LZ7(LZ1): #PS and bounds are the same as LZ1
+    def __init__(self, n_var=10):
+        super().__init__(n_var)
+
     def get_y(self, x, i):
         return np.power( x[i] - np.power( x[0], 0.5 * ( 1.0 + ( (3*(i-1) / (self.n_var - 2) ) ) ) ), 2 )
     def _evaluate(self, x, out, *args, **kwargs):
@@ -277,6 +280,8 @@ class LZ7(LZ1): #PS and bounds are the same as LZ1
         out["F"] = [f_1, f_2]
 
 class LZ8(LZ7): #PS and bounds are the same as LZ7 (and LZ1)
+    def __init__(self, n_var=10):
+        super().__init__(n_var=n_var)
     def _evaluate(self, x, out, *args, **kwargs):
         odd = np.arange(1, self.n_var, 2)
         even = np.arange(2, self.n_var, 2) #zero is not included
@@ -289,7 +294,8 @@ class LZ8(LZ7): #PS and bounds are the same as LZ7 (and LZ1)
         out["F"] = [f_1, f_2]
 
 class LZ9(LZ2): #PS and bounds are the same as LZ2
-
+    def __init__(self, n_var=30):
+        super().__init__(n_var=n_var)
     def _evaluate(self, x, out, *args, **kwargs):
         odd = np.arange(1, self.n_var, 2)
         even = np.arange(2, self.n_var, 2) #zero is not included

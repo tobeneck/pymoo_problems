@@ -35,16 +35,20 @@ class UF(Problem):
         return self.evaluate(self._calc_pareto_set(n_pareto_points))
 
 class UF1(LZ2): #exatly the same as LZ2
-    pass
+    def __init__(self, n_var=10):
+        super().__init__(n_var=n_var)
 
 class UF2(LZ5): #exatly the same as LZ5
-    pass
+    def __init__(self, n_var=10):
+        super().__init__(n_var=n_var)
 
 class UF3(LZ8): #exatly the same as LZ6
-    pass
+    def __init__(self, n_var=10):
+        super().__init__(n_var=n_var)
 
 class UF8(LZ6): #exatly the same as LZ6
-    pass
+    def __init__(self, n_var=10):
+        super().__init__(n_var=n_var)
 
 class UF9(UF):
     def __init__(self, n_var=30, epsilon=0.1):
