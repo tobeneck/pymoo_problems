@@ -245,7 +245,7 @@ class LZ6(LZ):
         #calculate the optimal values for x_1 and x_2. Try to get as many equidistant points as possible and calculate the rest randonly
         n_equidistant_samples = np.floor( np.sqrt(n_pareto_points) ).astype(int)
         n_random_samples = n_pareto_points - (n_equidistant_samples * n_equidistant_samples)
-        print(n_equidistant_samples, n_random_samples)
+        #print(n_equidistant_samples, n_random_samples)
         
         equidistant_samples = np.array( [[x, y] for x in np.linspace(0.0, 1.0, n_equidistant_samples) for y in np.linspace(0.0, 1.0, n_equidistant_samples)] )
         random_samples = np.random.rand(n_random_samples, 2)
