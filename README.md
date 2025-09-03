@@ -2,6 +2,11 @@
 
 This repository contains problem implementations for the pymoo [1] framework which I use for my research work. Some of them are just shightly changed pymoo implementations, others are not found in pymoo by default and implemented here.
 
+# Single-Objective Problems
+Here is a short list of the single-objective problems implemented.
+
+## Sphere Function
+Implementation of the sphere function in the bounds of -5 to 5.
 
 # Multi-Objective Problems
 Here is a short list of the multi-objective problems implemented.
